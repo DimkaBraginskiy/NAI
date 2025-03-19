@@ -19,31 +19,27 @@ public class Main {
 //            double distance = calculateDistance(inputVector, vector);
 //            System.out.println(distance);
 //        }
-        String fname = "C:\\Users\\Dimka\\IdeaProjects\\KNN_NAI\\src\\iris.data";
-        DataLoader loader = new DataLoader(fname);
-        List<Point> trainSet = loader.load();
-//        for (Point point : trainSet) {
-//            System.out.println(point);
-//        }
+        String trainFname = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\iris.data";
+        String testFname = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\iris.test.data";
 
-        double[] testVector = {5.0,3.5,1.3,0.3};
-        List<Point> kNNPoints = new ArrayList<>();
-        int k = 3;
+        List<Point> trainSet = DataLoader.load(trainFname);
+        List<Point> testSet = DataLoader.load(testFname);
 
-        KNNClassifier classifier = new KNNClassifier(k, trainSet);
-        kNNPoints = classifier.predict(testVector);
-
-        System.out.println("Nearest " + k + " neighbours to vector [");
-        for(int i = 0; i < testVector.length; i++) {
-            System.out.print(testVector[i] + ", ");
-        }
-        System.out.print(" ]:");
-
-        for(Point point : kNNPoints) {
+        for (Point point : trainSet) {
             System.out.println(point);
         }
 
-        System.out.println("Predicted class name: " + classifier.classify(kNNPoints));
+        System.out.println();
+
+        for(Point point : testSet) {
+            System.out.println(point);
+        }
+        System.out.println();
+
+        int k = 3;
+        KNNClassifier classifier = new KNNClassifier(k, trainSet);
+
+        classifier.classify(testSet);
 
 
     }

@@ -1,8 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class KNNClassifier {
         private int k;
@@ -13,29 +10,16 @@ public class KNNClassifier {
         this.points = points;
     }
 
-    public List<Point> predict(double[] testVector){
-        List<Point> kNNPoints = new ArrayList<Point>();
-
-
-
-        //for loop which takes vectors from point list one by one and calculates distance
-        for(Point point : points){
-            double distance = euclidianDistance(testVector, point.getVector());
-            point.setDistance(distance);
-        }
-
-        //sorting points by distance in ascending order
-        points.sort(Comparator.comparingDouble(Point::getDistance));
-
-        for(int i = 0; i < k; i++){
-            kNNPoints.add(points.get(i));
-        }
-
-        return kNNPoints;
+    public List<Point> getKClosestPoints(double[] testVector){
+        return points.
+                stream().
+                sorted(Comparator.comparingDouble(x -> euclideanDistance(testVector, x.getVector()))).
+                limit(k)
+                .toList();
     }
 
-    public String classify(List<Point> kNNPoints){
-        Map<String, Integer> frequency = new HashMap<String , Integer>();
+    public void classify(List<Point> kNNPoints){
+        /*Map<String, Integer> frequency = new HashMap<String , Integer>();
         int length = kNNPoints.size();
 
         for(Point point : kNNPoints){
@@ -45,23 +29,37 @@ public class KNNClassifier {
 
         String predictedClass = null;
         int maxCount = -1;
+*/
 
-        for(Map.Entry<String, Integer> entry : frequency.entrySet()){
+        for (Point p : kNNPoints){
+            String classified = predict(p);
+            System.out.println(p + " classified: " + classified);
+            System.out.println(classified.equals(p.getName()));
+        }
+    }
+
+    private String predict(Point point){
+        long maxCount = 0;
+        String predictedClass = "";
+        Map<String, Long> frequency = getKClosestPoints(point.getVector()).stream().
+                collect(Collectors.groupingBy(Point::getName,
+                        Collectors.counting()));
+
+        for(Map.Entry<String, Long> entry : frequency.entrySet()){
             String className = entry.getKey();
-            int count = entry.getValue();
+            long count = entry.getValue();
 
             if(count > maxCount){
                 maxCount = count;
                 predictedClass = className;
             }
         }
-
         return predictedClass;
     }
 
 
 
-    private double euclidianDistance(double[] v1, double[] v2){
+    private double euclideanDistance(double[] v1, double[] v2){
         double sum = 0.0;
         for(int i = 0; i < v1.length; i++){
             sum += Math.pow(v1[i] - v2[i], 2);
@@ -77,7 +75,4 @@ public class KNNClassifier {
         return sum;
     }
 
-    public void predict(){
-
-    }
 }

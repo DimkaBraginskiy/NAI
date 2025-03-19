@@ -8,13 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DataLoader {
-    private String fname;
 
-    public DataLoader(String fname) {
-        this.fname = fname;
-    }
-
-    public List<Point> load(){
+    public static List<Point> load(String fname) {
         List<Point> data = new ArrayList<Point>();
         String name;
 
@@ -29,7 +24,7 @@ public class DataLoader {
 
                 double[] values = new double[parts.length-1];
 
-                for(int i = 0; i < values.length-1; i++){
+                for(int i = 0; i < values.length; i++){
                     values[i] = Double.parseDouble(parts[i]);
                 }
                 name = parts[parts.length-1];
