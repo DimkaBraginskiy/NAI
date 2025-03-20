@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        String trainPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\";
+        String trainPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\train\\";
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Input the test set name:");
@@ -42,7 +42,7 @@ public class Main {
     }
 
     private static void firstOption(Scanner scanner, List<Point> trainSet){
-        System.out.println("Input the vector: val1,val2,val3,val4 :");
+        System.out.println("Input the vector: val 1, val 2, ... , val n :(n depends on a train dataset dimension you provide)");
         String input = scanner.next().trim();
 
         System.out.println("Input the class name:");
@@ -69,7 +69,7 @@ public class Main {
 
 
     private static void secondOption(Scanner scanner, List<Point> trainSet){
-        String testPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\";
+        String testPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\test\\";
 
         System.out.println("Input the test set name");
         String fname = scanner.next().trim();
