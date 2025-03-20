@@ -7,40 +7,87 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        String trainPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\";
+        Scanner scanner = new Scanner(System.in);
 
-//        double[] inputVector = {5.0, 3.3, 1.4, 0.2};
-//
-//
-//
-//
-//        Map<String, double[]> vectors = new HashMap<>();
-//
-//        for (double[] vector : vectors) {
-//            double distance = calculateDistance(inputVector, vector);
-//            System.out.println(distance);
-//        }
-        String trainFname = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\iris.data";
-        String testFname = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\iris.test.data";
+        System.out.println("Input the test set name:");
+        String testFname = scanner.nextLine();
 
-        List<Point> trainSet = DataLoader.load(trainFname);
-        List<Point> testSet = DataLoader.load(testFname);
+        trainPath+=testFname;
 
+        List<Point> trainSet = DataLoader.load(trainPath);
+
+        System.out.println("Your train set:");
         for (Point point : trainSet) {
             System.out.println(point);
         }
 
-        System.out.println();
 
+        while(true){
+            System.out.println("Provide an answer:\n" +
+                    "1 -> Find k-Points to an Input-Vector\n" +
+                    "2 -> Find k-Points for a test set of Vectors");
+            int selection = scanner.nextInt();
+            if(selection == 1){
+                firstOption(scanner, trainSet);
+                break;
+            }else if(selection == 2){
+                secondOption(scanner, trainSet);
+                break;
+            }
+            else{
+                System.out.println("Wrong input.\n");
+            }
+        }
+    }
+
+    private static void firstOption(Scanner scanner, List<Point> trainSet){
+        System.out.println("Input the vector: val1,val2,val3,val4 :");
+        String input = scanner.next().trim();
+
+        System.out.println("Input the class name:");
+        String className = scanner.next().trim();
+
+        System.out.println("Input the value for k:");
+        int k = scanner.nextInt();
+
+        String[] parts = input.split(",");
+
+        double[] vector = new double[parts.length];
+
+        for(int i = 0; i < parts.length; i++){
+            vector[i] = Double.parseDouble(parts[i]);
+        }
+
+        Point point = new Point(vector, className);
+
+        KNNClassifier classifier = new KNNClassifier(k, trainSet);
+
+        classifier.classify(point);
+    }
+
+
+
+    private static void secondOption(Scanner scanner, List<Point> trainSet){
+        String testPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\KNN_NAI\\src\\";
+
+        System.out.println("Input the test set name");
+        String fname = scanner.next().trim();
+
+        System.out.println("Input the value for k:");
+        int k = scanner.nextInt();
+
+        testPath+=fname;
+
+        List<Point> testSet = DataLoader.load(testPath);
+
+        System.out.println("Your test set:");
         for(Point point : testSet) {
             System.out.println(point);
         }
-        System.out.println();
 
-        int k = 3;
         KNNClassifier classifier = new KNNClassifier(k, trainSet);
 
         classifier.classify(testSet);
-
-
     }
 }

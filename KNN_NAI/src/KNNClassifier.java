@@ -10,11 +10,12 @@ public class KNNClassifier {
         this.points = points;
     }
 
+
     public List<Point> getKClosestPoints(double[] testVector){
         return points.
-                stream().
-                sorted(Comparator.comparingDouble(x -> euclideanDistance(testVector, x.getVector()))).
-                limit(k)
+                stream()
+                .sorted(Comparator.comparingDouble(x -> euclideanDistance(testVector, x.getVector())))
+                .limit(k)
                 .toList();
     }
 
@@ -38,10 +39,18 @@ public class KNNClassifier {
         }
     }
 
+    public void classify(Point p){
+        String classified = predict(p);
+        System.out.println(p + " classified: " + classified);
+        System.out.println(classified.equals(p.getName()));
+    }
+
     private String predict(Point point){
         long maxCount = 0;
         String predictedClass = "";
-        Map<String, Long> frequency = getKClosestPoints(point.getVector()).stream().
+
+        Map<String, Long> frequency = getKClosestPoints(point.getVector()).
+                stream().
                 collect(Collectors.groupingBy(Point::getName,
                         Collectors.counting()));
 
