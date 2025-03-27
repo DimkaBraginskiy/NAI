@@ -1,45 +1,42 @@
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DataLoader {
-    public static double[][] loadFeatures(String filename) throws IOException {
-        ArrayList<double[]> dataList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        String line;
 
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(",");
-            double[] features = new double[parts.length - 1];
+    public static List<Point> load(String fname) {
+        List<Point> data = new ArrayList<Point>();
+        String name;
 
-            for (int i = 0; i < parts.length - 1; i++) {
-                features[i] = Double.parseDouble(parts[i]); // Convert to numbers
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fname));
+            String line;
+            while((line = br.readLine()) != null){
+                String[] parts = line.split(",");
+                if(parts.length < 2){
+                    continue;
+                }
+
+                double[] values = new double[parts.length-1];
+
+                for(int i = 0; i < values.length; i++){
+                    values[i] = Double.parseDouble(parts[i]);
+                }
+                name = parts[parts.length-1];
+                Point point = new Point(values, name);
+                data.add(point);
             }
-            dataList.add(features);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        br.close();
 
-        return dataList.toArray(new double[0][]);
-    }
-
-    public static int[] loadLabels(String filename) throws IOException {
-        ArrayList<Integer> labelList = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        String line;
-
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(",");
-            String label = parts[parts.length - 1]; // Last column = class
-
-            if (label.equals("Iris-versicolor")) {
-                labelList.add(0); // Assign class 0
-            } else if (label.equals("Iris-virginica")) {
-                labelList.add(1); // Assign class 1
-            }
-        }
-        br.close();
-
-        return labelList.stream().mapToInt(i -> i).toArray();
+        return data;
     }
 }
