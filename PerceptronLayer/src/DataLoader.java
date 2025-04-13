@@ -15,19 +15,36 @@ public class DataLoader {
         try {
             BufferedReader br = new BufferedReader(new FileReader(fname));
             String line;
-            while((line = br.readLine()) != null){
-                String[] parts = line.split(",");
-                if(parts.length < 2){
+            while((line = br.readLine()) != null) {
+                // Skip empty lines
+                if (line.trim().isEmpty()) {
                     continue;
                 }
 
-                double[] values = new double[parts.length-1];
 
-                for(int i = 1; i < values.length; i++){
-                    values[i] = Double.parseDouble(parts[i]);
+                String[] parts = line.split(",", 2);
+                if (parts.length < 2) {
+                    continue;
                 }
-                name = parts[0];
-                Point point = new Point(values, name);
+
+                String label = parts[0];
+                String text = parts[1];
+                System.out.println("Label: " + label);
+                System.out.println("Text: " + text);
+
+                double[] occurrences = new double[26];
+
+
+                text = text.toLowerCase();
+                for (int i = 0; i < text.length(); i++) {
+                    char c = text.charAt(i);
+                    if (c >= 'a' && c <= 'z') {
+                        occurrences[c - 'a']++;
+                    }
+                }
+
+
+                Point point = new Point(occurrences, label);
                 data.add(point);
             }
         } catch (FileNotFoundException e) {
