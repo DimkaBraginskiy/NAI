@@ -45,16 +45,14 @@ public class PerceptronLayer {
                     String trueLang = point.getName();
                     double[] x = point.getVector();
 
-                    int expected = language.equals(trueLang) ? 1 : 0;
-                    int predicted = p.predict(point.getVector());
+                    double expected = language.equals(trueLang) ? 1 : 0;
+                    double predicted = p.predict(point.getVector());
 
-                    if(predicted != expected) {
+                    if((predicted > 0.5) != (expected > 0.5)) {
                         p.updateWeights(x, expected, predicted);
                         langErrors++;
                     }
                 }
-
-                double accuracy = p.calculateAccuracy(trainSet);
 
                 totalErrors += langErrors;
                 System.out.println("Language errors: " + langErrors);

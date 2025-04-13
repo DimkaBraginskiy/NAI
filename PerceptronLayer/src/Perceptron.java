@@ -17,7 +17,7 @@ public class Perceptron {
         this.weights = new double[inputSize];
         this.learnRate = learnRate;
 
-        for(int i = 0; i < weights.length; i++) {
+        for (int i = 0; i < weights.length; i++) {
             weights[i] = random.nextDouble() * 0.1;
         }
 
@@ -27,58 +27,40 @@ public class Perceptron {
                 "\nGenerated bias: " + bias);
     }
 
-
-
-    public int encodeLabel(String label){
-        return label.equals("German") ? 0 : 1;
-    }
-
-    public int predict(double[] input) { // Activation function
-        if(input == null || input.length != weights.length) {
+    public double predict(double[] input) {
+        if (input == null || input.length != weights.length) {
             System.out.println("Error: input length != weights.length");
         }
 
-        double net = bias;
+        double net = 0.0;
 
-        for(int i = 0; i < weights.length; i++) {
+        for (int i = 0; i < weights.length; i++) {
             net += input[i] * weights[i];
         }
 
+        net -= bias;
 
-        int af = (net >= 0) ? 1 : 0;
-        //System.out.println("net: " + net + ". Activation function: " + af);
+        double activation = sigmoidActivation(net);
 
-        return (net >= 0) ? 1 : 0; // Activation function
+        return activation;
     }
 
-    public void updateWeights(double[] input, int expected, int predicted){
+    public void updateWeights(double[] input, double expected, double predicted) {
         double error = expected - predicted;
 
-        for(int i = 0; i < weights.length; i++){
+        for (int i = 0; i < weights.length; i++) {
             weights[i] += learnRate * error * input[i];
         }
-
-        bias -= learnRate*error;
 
         System.out.println("Updated Weights: " + Arrays.toString(weights));
     }
 
-    public double calculateAccuracy(List<Point> points){
-        int correct = 0;
-        int incorrect = 0;
+    public double updateBias(double d, double y) {
+        bias -= learnRate * (d - y) * y * (1 - y);
+        return bias;
+    }
 
-        for(Point point : points){
-            int predicted = predict(point.getVector());
-            int actual = encodeLabel(point.getName());
-
-            if(predicted == actual){
-                correct++;
-                System.out.println("Correct Prediction:\nPrediсted: " + predicted + " = Actual: " + actual);
-            }else{
-                System.out.println("\n!Incorrect Prediction:\nPrediсted: " + predicted + " != Actual: " + actual +"!\n");
-            }
-        }
-
-        return (double) correct / points.size(); // returning accuracy
+    private double sigmoidActivation(double net) {
+        return (1.0 / (1.0 + Math.exp(-net)));
     }
 }
