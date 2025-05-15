@@ -77,21 +77,21 @@ public class Perceptron {
         return (net >= 0) ? 1 : 0; // Activation function
     }
 
-    public double updateIterError(List<Point> points){
-        double totalError = 0.0;
-        int n = points.size();
-
-        for(Point point : points){
-            int predicted = predict(point.getVector());
-            int expected = encodeLabel(point.getName());
-
-            double subError = expected - predicted;
-
-            totalError += Math.pow(subError, 2);
-
-        }
-        return totalError / n;
-    }
+//    public double updateIterError(List<Point> points){
+//        double totalError = 0.0;
+//        int n = points.size();
+//
+//        for(Point point : points){
+//            int predicted = predict(point.getVector());
+//            int expected = encodeLabel(point.getName());
+//
+//            double subError = expected - predicted;
+//
+//            totalError += Math.pow(subError, 2);
+//
+//        }
+//        return totalError / n;
+//    }
 
     public void updateWeights(double[] input, int expected, int predicted){
         double error = expected - predicted;

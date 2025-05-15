@@ -30,14 +30,14 @@ public class Main {
         System.out.println("Test accuracy: " + testAccuracy + "%");
     }
 
-    private static void filesLoading(Scanner scanner){
+    private static void filesLoading(Scanner scanner) {
 
         String trainPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\PerceptronLayer\\src\\train\\";
 
         System.out.println("Input the train set name:");
         String trainSetName = scanner.nextLine();
 
-        trainPath+=trainSetName;
+        trainPath += trainSetName;
 
 
         String testPath = "C:\\Users\\Dimka\\IdeaProjects\\NAI\\PerceptronLayer\\src\\test\\";
@@ -45,26 +45,24 @@ public class Main {
         System.out.println("Input the test set name:");
         String testSetName = scanner.nextLine();
 
-        testPath+=testSetName;
+        testPath += testSetName;
 
 
-        trainPoints =  DataLoader.load(trainPath);
-        testPoints =  DataLoader.load(testPath);
-
+        trainPoints = DataLoader.load(trainPath);
+        testPoints = DataLoader.load(testPath);
 
 
         System.out.println("Your train set:");
         trainLanguages = new ArrayList<>();
-        for(Point point : trainPoints){
+        for (Point point : trainPoints) {
             System.out.println(point);
 
             trainLanguages.add(point.getName());
         }
 
         System.out.println("Your test set:");
-        for(Point point : testPoints){
+        for (Point point : testPoints) {
             System.out.println(point);
         }
     }
 }
-
